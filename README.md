@@ -21,3 +21,8 @@ __Model Fitting__
 __AI Prompt engineering__
 - https://platform.claude.com/docs/en/build-with-claude/prompt-engineering/overview
 - https://cloud.google.com/discover/what-is-prompt-engineering
+
+__AI resources__
+- [Berkeley Licensed AI tools](https://ai.berkeley.edu/tools-services/licensed-generative-ai-tools)
+- [Cursor for students](https://cursor.com/students)
+- [ChatGPT for students](https://chatgpt.com/college-students/)
