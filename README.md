@@ -1,5 +1,10 @@
 Useful resources
 
+__Github tutorials__
+
+- [Official Github tutorial](https://docs.github.com/en/get-started/start-your-journey/hello-world)
+- [Another introduction to github](https://github.com/skills/introduction-to-github)
+
 __Where to find astro papers__
 - [NASA/ADS](https://ui.adsabs.harvard.edu)
 - [SciExplorer](https://scixplorer.org) (this is the new ADS)
