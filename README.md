@@ -15,12 +15,11 @@ __Stellar Populations papers__
 
 Model Fitting:
 
-- "Data Analysis Recipes: Using Markov Chain Monte Carlo": https://ui.adsabs.harvard.edu/abs/2018ApJS..236...11H/abstract
-- "MCMC: A (very) Beginnner’s Guide": https://prappleizer.github.io/Tutorials/MCMC/MCMC_Tutorial.html
-- Adrian Price-Whelan's Blog on Model Fitting Tutorials: https://adrian.pw/blog/
-- Model fitting in astropy: https://docs.astropy.org/en/stable/modeling/fitting.html
-- Scientific Computing in Astrophysics: https://astro-330.github.io/intro.html
-- 
+- [Data Analysis Recipes: Using Markov Chain Monte Carlo (Hogg 2017)](https://ui.adsabs.harvard.edu/abs/2018ApJS..236...11H/abstract)
+- [MCMC: A (very) Beginnner’s Guide](https://prappleizer.github.io/Tutorials/MCMC/MCMC_Tutorial.html)
+- [Adrian Price-Whelan's Blog on Model Fitting Tutorials](https://adrian.pw/blog/)
+- [Model fitting in astropy](https://docs.astropy.org/en/stable/modeling/fitting.html)
+- [Scientific Computing in Astrophysics](https://astro-330.github.io/intro.html)
 
 AI Prompt engineering:
 - https://platform.claude.com/docs/en/build-with-claude/prompt-engineering/overview
