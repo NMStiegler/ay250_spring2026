@@ -2,7 +2,7 @@ Useful resources
 
 Where to find astro papers:
 
-- https://ui.adsabs.harvard.edu
+- [NASA/ADS](https://ui.adsabs.harvard.edu)
 - https://scixplorer.org
 
 
