@@ -1,0 +1,13 @@
+# Research Notebook for AST250 Stellar Populations with Dan Weisz
+A large element of the class is exploring how generative AI can be used in a scientific workflow. I’ll be recording the results of my experiments here.
+
+
+
+**Jan 22nd 2026**
+- Decided to take a slightly different approach today than just jumping into the research problem. I wanted to make sure that my environment was set up to work well and successfully. I tried to get GitHub Copilot or to figure out another way to link AI Coding into my VSCode environment. 
+- GitHub Copilot takes an @astro.berkeley.edu email address. I'm not sure I have one (tried noah.stiegler@astro.berkeley.edu). Emailed Bill Boyd to try to set one up
+- In the meantime, I wanted to setup a research notebook which works in VSCode. I downloaded the [MDOffice](https://marketplace.visualstudio.com/items?itemName=06401f15-a30d-6a97-82a3-8ca0e379c4eb.md-office-editor) and [Image Paste](https://marketplace.visualstudio.com/items?itemName=mushan.vscode-paste-image) extensions in VSCode which turns markdown files into slightly more accessible MS office style documents which I can edit directly in VSCode as well as letting me paste screenshots in (puts the screenshots in a folder and links them to the markdown file)
+- To find these extensions, I used Gemini, and prompted it with "Is there an equivalent to a microsoft word file which I can edit through VSCode easily? I want text editing, formatting, and the ability to copy/paste screenshots"
+- MDoffice extension doesn't work super well. Sometimes it loses words that I type. The "link to external page" button doesn't work. I uninstalled
+- I got frustrated and searched the extension store on my own. I found [Markdown All in One](https://marketplace.visualstudio.com/items?itemName=yzhang.markdown-all-in-one) and [Markdown Preview](https://marketplace.visualstudio.com/items?itemName=shd101wyy.markdown-preview-enhanced) extensions. Downloading them worked well. I wanted to have the renderd markdown file automatically open and track alongside me as I typed. I asked "What extension has the markdown text and the rendered file side-by-side automatically?" to see if it would recommend one to me, but it told me that I could just enable a setting in Markdown All in One if I had it installed, which was helpful (as it had recommended this one earlier too)
+- I had prompted all of these questions in the same instance of Gemini so it knew I was on the same thread. Responding as I would to a new google prompt (as opposed to feigning conversation which may be more similar to the works it was trained on) worked well enough
