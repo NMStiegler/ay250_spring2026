@@ -1,0 +1,4 @@
+Image: psf_026.bmp
+Center X: 153
+Center Y: 216
+Radius: 10

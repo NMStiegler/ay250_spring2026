@@ -1,0 +1,4 @@
+Image: psf_094.bmp
+Center X: 267
+Center Y: 233
+Radius: 7

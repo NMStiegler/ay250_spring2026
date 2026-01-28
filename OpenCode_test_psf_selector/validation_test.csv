@@ -1,0 +1,3 @@
+filename,click_x,click_y,center_x,center_y,radius,distance,result
+psf_001.bmp,87,152,88,151,5,1.4142135623730951,PASS
+psf_002.bmp,184,216,186,219,9,3.605551275463989,PASS

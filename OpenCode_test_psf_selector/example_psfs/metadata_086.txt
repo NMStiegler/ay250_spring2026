@@ -1,0 +1,4 @@
+Image: psf_086.bmp
+Center X: 93
+Center Y: 58
+Radius: 9

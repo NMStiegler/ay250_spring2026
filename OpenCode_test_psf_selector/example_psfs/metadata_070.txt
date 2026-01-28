@@ -1,0 +1,4 @@
+Image: psf_070.bmp
+Center X: 150
+Center Y: 20
+Radius: 10

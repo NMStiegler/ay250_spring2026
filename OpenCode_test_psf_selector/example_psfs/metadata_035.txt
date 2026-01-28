@@ -1,0 +1,4 @@
+Image: psf_035.bmp
+Center X: 156
+Center Y: 148
+Radius: 8
