@@ -1,0 +1,166 @@
+# Stellar IMF Monte Carlo Simulation Plan
+
+## Project Overview
+Explore statistical error bounds of stellar initial mass functions (IMF) using Monte Carlo methods. Generate synthetic stellar populations and attempt to recover their initial parameters to measure recovery precision.
+
+## Power-Law IMF Mathematical Foundation
+
+### Functional Form
+The stellar IMF power-law distribution:
+$$ \frac{dN}{dM} = A M^{-\alpha} $$
+
+Where:
+- dN/dM: number of stars per unit mass
+- M: stellar mass in solar masses
+- α: slope (Salpeter value: 2.35)
+- A: normalization constant
+
+### Normalized Probability Density Function
+$$ p(M) = \frac{(1-\alpha) M^{-(\alpha+1)}}{M_{max}^{1-\alpha} - M_{min}^{1-\alpha}} $$
+
+### Inverse Transform Sampling
+To generate stellar masses from the power-law distribution:
+
+1. Generate uniform random number u ∈ [0,1]
+2. Transform using inverse CDF:
+   $$ M(u) = \left[\frac{M_{max}^{1-\alpha} - M_{min}^{1-\alpha}}{1-\alpha} \cdot u + M_{min}^{1-\alpha}\right]^{1/(1-\alpha)} $$
+
+## Implementation Structure
+
+### 1. Core Configuration Parameters
+```python
+config = {
+    'alpha_true': 2.35,           # Fixed slope for experiments (configurable)
+    'M_min': 0.1,                 # Minimum mass (solar masses)
+    'M_max': 100.0,               # Maximum mass (solar masses)
+    'N_values': [10, 50, 100, 500, 1000, 5000],  # Cluster sizes to test
+    'K_simulations': 1000,        # Monte Carlo iterations per parameter set
+    'r_ratios': [10, 100, 1000]  # M_max/M_min ratios to explore
+}
+```
+
+### 2. Data Generation Module
+- **Function**: `generate_stellar_masses(N, alpha, M_min, M_max)`
+- **Method**: Inverse transform sampling using the formula above
+- **Output**: Array of N stellar masses drawn from power-law distribution
+- **Validation**: Verify generated distribution matches expected PDF
+
+### 3. Fitting Methods Implementation
+
+#### A. Maximum Likelihood Estimation (MLE)
+- Analytical solution for power-law slope
+- Fast, exact solution for bounded power-law
+- **Output**: α_fit, σ_α (analytical uncertainty)
+
+#### B. Markov Chain Monte Carlo (MCMC)
+- **Tool**: emcee sampler
+- **Configuration**:
+  - Walkers: 20-50
+  - Burn-in: 100 steps
+  - Production: 500 steps
+  - Total: ~600 steps per fit (~few seconds each)
+- **Priors**: Uniform prior on α ∈ [1, 4] (physically motivated)
+- **Convergence**: Gelman-Rubin statistic < 1.1
+- **Output**: α_fit, σ_α, convergence_status, chain diagnostics
+
+#### C. Least Squares Fit
+- Linear regression on log-transformed data: log(dN/dM) vs log(M)
+- Simple and intuitive, but biased for small N
+- **Output**: α_fit, σ_α, R², fit_quality_metrics
+
+### 4. Monte Carlo Simulation Framework
+
+#### Core Function: `run_simulation_cluster(N, M_min, M_max, K, methods)`
+- **Input**: Cluster parameters and fitting methods to use
+- **Process**:
+  1. Generate K synthetic clusters with given parameters
+  2. Fit each cluster using specified methods
+  3. Track convergence, failures, and timing
+  4. Save intermediate results periodically
+
+#### Progress Tracking
+- Real-time progress bars using tqdm
+- Periodic status updates (every 100 iterations)
+- Failure logging with error details
+
+### 5. Experimental Matrix
+
+#### Primary Experiment: Precision vs Cluster Size
+- **Fixed**: M_min = 0.1, M_max = 100, α_true = 2.35
+- **Variable**: N ∈ [10, 50, 100, 500, 1000, 5000]
+- **Iterations**: K = 1000 per N value
+- **Goal**: σ_α as function of N for each fitting method
+
+#### Secondary Experiment: Mass Ratio Effects  
+- **Fixed**: N = 1000, α_true = 2.35
+- **Variable**: r = M_max/M_min ∈ [10, 100, 1000]
+- **Method**: Vary M_min while keeping product M_min × M_max constant
+- **Goal**: Effect of dynamic range on precision
+
+### 6. Data Management
+
+#### CSV Output Structure
+```csv
+iteration,N,M_min,M_max,M_ratio,alpha_true,fit_method,alpha_fit,alpha_uncertainty,convergence_status,timestamp,runtime_ms
+```
+
+#### File Naming Convention
+- Individual results: `results_N{N}_alpha{alpha}_r{ratio}.csv`
+- Summary statistics: `summary_N{N}_alpha{alpha}_r{ratio}.csv`
+- Complete experiment: `full_experiment_{timestamp}.csv`
+
+### 7. Analysis and Visualization
+
+#### Key Metrics to Calculate
+- **Precision**: σ_α (standard deviation of fitted α values)
+- **Bias**: ⟨α_fit⟩ - α_true (mean recovery error)
+- **Success Rate**: Fraction of convergent fits (especially MCMC)
+- **Method Comparison**: Relative performance metrics
+
+#### Essential Plots
+1. **Recovery Precision**: σ_α vs N (log-log plot, all methods)
+2. **Recovery Bias**: (α_fit - α_true) vs N for each method
+3. **Method Comparison**: Bar charts of precision and bias
+4. **Mass Ratio Effects**: σ_α vs r (M_max/M_min ratio)
+5. **Convergence Diagnostics**: Success rates vs N
+6. **Distributions**: Histograms of fitted α values for each N
+
+#### Statistical Analysis
+- Confidence intervals on precision estimates
+- Bootstrapping for robust uncertainty quantification
+- Comparison with theoretical error propagation
+
+### 8. Implementation Dependencies
+- **Core**: numpy, scipy, matplotlib
+- **MCMC**: emcee
+- **Data handling**: pandas
+- **Progress tracking**: tqdm
+- **File operations**: csv, os, pathlib
+
+### 9. Success Criteria
+- All three fitting methods implemented and working
+- MCMC convergence rate > 95% for N ≥ 100
+- Precision scales as expected with √N for large N
+- Reproducible results with fixed random seeds
+- Complete analysis pipeline from simulation to plots
+
+### 10. Development Milestones
+1. **Milestone 1**: Data generation + MLE fitting
+2. **Milestone 2**: Add least squares fitting
+3. **Milestone 3**: Implement MCMC with convergence checks
+4. **Milestone 4**: Monte Carlo simulation framework
+5. **Milestone 5**: Full experimental matrix execution
+6. **Milestone 6**: Analysis and visualization pipeline
+
+### 11. Risk Mitigation
+- **MCMC failures**: Implement fallback to MLE for problematic cases
+- **Memory issues**: Process in batches for large K values
+- **Reproducibility**: Fix random seeds, save configuration files
+- **Data loss**: Automatic periodic saving of intermediate results
+
+## Notes
+- Mass units: Solar masses throughout
+- Default bounds: M_min = 0.1 M☉, M_max = 100 M☉
+- α_true fixed at 2.35 (Salpeter) for precision studies
+- CSV format for all outputs for easy verification
+- Fast MCMC convergence prioritized over ultra-high precision
