@@ -174,34 +174,31 @@ def plot_imf_comparison(masses, fit_alpha, M_obs, M_max=0.8, m_c=0.20, sigma=0.6
     # Mass range for plotting
     m_plot = np.linspace(0.01, 1.0, 1000)
     
-    # Top left: PDF comparison
+# Top left: PDF comparison
     ax1 = axes[0, 0]
     lognormal_vals = log_normal_pdf(m_plot, m_c, sigma)
-    powerlaw_vals = powerlaw_pdf(m_plot, fit_alpha)
+    # Normalize log-normal over the fitting range for fair comparison
+    mask = (m_plot >= M_obs) & (m_plot <= M_max)
+    lognormal_integral = np.trapz(lognormal_vals[mask], m_plot[mask])
+    lognormal_normalized = lognormal_vals / lognormal_integral
     
-    # Normalize for comparison
-    lognormal_norm = lognormal_vals / np.trapz(lognormal_vals[(m_plot >= M_obs) & (m_plot <= M_max)], 
-                                               m_plot[(m_plot >= M_obs) & (m_plot <= M_max)])
-    powerlaw_norm = powerlaw_vals / np.trapz(powerlaw_vals[(m_plot >= M_obs) & (m_plot <= M_max)], 
-                                            m_plot[(m_plot >= M_obs) & (m_plot <= M_max)])
-    
-    ax1.plot(m_plot, lognormal_vals, 'b-', label='True Log-Normal', linewidth=2)
-    ax1.plot(m_plot, powerlaw_vals, 'r--', label=f'Fitted Power-Law (α={fit_alpha:.2f})', linewidth=2)
+    powerlaw_vals = powerlaw_pdf(m_plot, fit_alpha, M_obs, M_max)  # Use normalized power-law
     ax1.axvspan(M_obs, M_max, alpha=0.2, color='yellow', label='Observable Range')
     ax1.set_xlabel('Mass (M☉)')
     ax1.set_ylabel('PDF')
-    ax1.set_title('PDF Comparison')
+    ax1.set_title('PDF Comparison (Log-Log Scale)')
     ax1.legend()
     ax1.grid(True, alpha=0.3)
     
     # Top right: Histogram with fitted distributions
     ax2 = axes[0, 1]
+    # Create histogram with log-log scale
     ax2.hist(masses, bins=30, density=True, alpha=0.7, color='skyblue', edgecolor='black', label='Data')
-    ax2.plot(m_plot, lognormal_norm, 'b-', label='True Log-Normal', linewidth=2)
-    ax2.plot(m_plot, powerlaw_norm, 'r--', label=f'Fitted Power-Law (α={fit_alpha:.2f})', linewidth=2)
+    ax2.loglog(m_plot, lognormal_normalized, 'b-', label='True Log-Normal (normalized)', linewidth=2)
+    ax2.loglog(m_plot, powerlaw_vals, 'r--', label=f'Fitted Power-Law (α={fit_alpha:.2f})', linewidth=2)
     ax2.set_xlabel('Mass (M☉)')
     ax2.set_ylabel('Normalized Frequency')
-    ax2.set_title('Histogram with Fitted Models')
+    ax2.set_title('Histogram with Fitted Models (Log-Log Scale)')
     ax2.legend()
     ax2.grid(True, alpha=0.3)
     ax2.set_xlim([M_obs - 0.05, M_max + 0.05])
@@ -209,7 +206,7 @@ def plot_imf_comparison(masses, fit_alpha, M_obs, M_max=0.8, m_c=0.20, sigma=0.6
     # Bottom left: Log-log plot
     ax3 = axes[1, 0]
     mask = (m_plot >= M_obs) & (m_plot <= M_max)
-    ax3.loglog(m_plot[mask], lognormal_vals[mask], 'b-', label='True Log-Normal', linewidth=2)
+    ax3.loglog(m_plot[mask], lognormal_normalized[mask], 'b-', label='True Log-Normal (normalized)', linewidth=2)
     ax3.loglog(m_plot[mask], powerlaw_vals[mask], 'r--', label=f'Fitted Power-Law (α={fit_alpha:.2f})', linewidth=2)
     ax3.set_xlabel('Mass (M☉)')
     ax3.set_ylabel('PDF')
@@ -219,7 +216,7 @@ def plot_imf_comparison(masses, fit_alpha, M_obs, M_max=0.8, m_c=0.20, sigma=0.6
     
     # Bottom right: Residuals
     ax4 = axes[1, 1]
-    lognormal_interp = np.interp(m_plot[mask], m_plot[mask], lognormal_vals[mask])
+    lognormal_interp = np.interp(m_plot[mask], m_plot[mask], lognormal_normalized[mask])
     powerlaw_interp = np.interp(m_plot[mask], m_plot[mask], powerlaw_vals[mask])
     residuals = (powerlaw_interp - lognormal_interp) / lognormal_interp * 100
     
